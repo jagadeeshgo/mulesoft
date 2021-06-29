@@ -1,0 +1,55 @@
+#%RAML 1.0
+title: IT Accounts
+types:
+  AccountsDataType: !include example/accDataType.raml
+
+/accounts:
+  get:
+    queryParameters:
+      person: string
+      account_type:
+        required: false
+        enum:
+          - personal
+          - business
+      acc_name: string
+    responses:
+        200:
+            body:
+                application/json:
+                  type: AccountsDataType []
+                  examples:
+                    output: !include example/exampleData.raml
+  post:
+    body:
+      application/json:
+        type: AccountsDataType
+        examples:
+          input: !include dataBYId/creatingData.raml
+    responses:
+      201:
+        body:
+          application/json:
+            example:
+              message: Account Created
+                      
+
+  /{Acc_ID}:
+    get:
+      responses:
+        200:
+          body:
+            application/json:
+              type: AccountsDataType
+              examples:
+                output: !include dataBYId/retrevingForUri.raml
+    delete:
+      responses:
+        200:
+          body:
+            application/json:
+              example:
+                message:  Flight deleted successfully
+      
+
+    
