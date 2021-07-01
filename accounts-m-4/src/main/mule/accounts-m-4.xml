@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns:db="http://www.mulesoft.org/schema/mule/db"
+	xmlns:http="http://www.mulesoft.org/schema/mule/http"
+	xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+http://www.mulesoft.org/schema/mule/db http://www.mulesoft.org/schema/mule/db/current/mule-db.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+	<http:listener-config name="HTTP_Listener_config" doc:name="HTTP Listener config" doc:id="b679b616-8a43-40c3-becd-fdf72276fa67" >
+		<http:listener-connection host="0.0.0.0" port="8081" />
+	</http:listener-config>
+	<db:config name="Database_Config" doc:name="Database Config" doc:id="aa98c6b7-3b8e-42df-8e80-4ce5c1139843" >
+		<db:my-sql-connection host="iltdb.learn.mulesoft.com" port="3306" user="mule" password="mule" database="training" />
+	</db:config>
+	<flow name="getAccounts" doc:id="68abfa7f-9c46-4e84-bb2a-e6cb456388d7" >
+		<db:select doc:name="Select" doc:id="030df53f-00dc-4439-a176-d7325146e129" config-ref="Database_Config">
+			<db:sql ><![CDATA[select * from flights_customers;]]></db:sql>
+		</db:select>
+		<ee:transform doc:name="Transform Message" doc:id="59e8aa44-498a-4f7d-90a1-9cb6af33a526" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+payload map ( payload01 , indexOfPayload01 ) -> {
+	accountID: payload01.accountID as Number,
+	name: payload01.name default "",
+	Acc_Type: {
+		"type": payload01.accountType default ""
+	},
+	address: {
+		street: payload01.street default "",
+		city: payload01.city default "",
+		state: payload01.state default "",
+		country: payload01.country default "",
+		postal: payload01.postal default ""
+	},
+	Air_miles: payload01.miles default 0,
+	creation_date: payload01.creationDate as String default ""
+}]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+	</flow>
+	<flow name="getAccountsById" doc:id="82daf874-22ad-4238-81f4-c37ae9fa034c" >
+		<db:select doc:name="Copy_of_Select" doc:id="2fcb4466-4eaa-4d33-a7fa-f6a8b8196b1d" config-ref="Database_Config" >
+			<db:sql ><![CDATA[select * from flights_customers where accountID=:accountID;]]></db:sql>
+			<db:input-parameters ><![CDATA[#[{"accountID":attributes.uriParams.accountID}]]]></db:input-parameters>
+		</db:select>
+		<ee:transform doc:name="Copy_of_Transform Message" doc:id="c3d6a096-5a24-48e3-8196-1e3557ab6868" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+payload map ( payload01 , indexOfPayload01 ) -> {
+	accountID: payload01.accountID as Number,
+	name: payload01.name default "",
+	Acc_Type: {
+		"type": payload01.accountType default ""
+	},
+	address: {
+		street: payload01.street default "",
+		city: payload01.city default "",
+		state: payload01.state default "",
+		country: payload01.country default "",
+		postal: payload01.postal default ""
+	},
+	Air_miles: payload01.miles default 0,
+	creation_date: payload01.creationDate as String default ""
+}]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+	</flow>
+	<flow name="post" doc:id="16e79a50-2e2f-4a59-9db1-7a68be2ad572" >
+		<set-payload value='{"message":"account added"}' doc:name="Set Payload" doc:id="9dca888b-2f23-451f-baa1-30711978ba88" />
+	</flow>
+</mule>

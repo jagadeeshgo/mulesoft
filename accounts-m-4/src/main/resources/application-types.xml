@@ -1,0 +1,28 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<types:mule xmlns:types="http://www.mulesoft.org/schema/mule/types">
+  <types:catalog>
+    <types:type name="accounts" format="json">
+      <types:shape format="weave" example="examples/accounts.json"><![CDATA[%dw 2.0
+
+type accounts = Array<{|  accountID: Number {"typeId": "int"},   country: String,   street: String,   state: String,   name: String,   city: String,   postal: String|}> {"example": "[{\\\"accountID\\\":5039,\\\"country\\\":\\\"United States\\\",\\\"street\\\":\\\"77 Geary Street\\\",\\\"state\\\":\\\"California\\\",\\\"name\\\":\\\"Maxine Mule\\\",\\\"city\\\":\\\"San Francisco\\\",\\\"postal\\\":\\\"94108\\\"},{\\\"accountID\\\":5043,\\\"country\\\":\\\"United States\\\",\\\"street\\\":\\\"77 Geary Street\\\",\\\"state\\\":\\\"California\\\",\\\"name\\\":\\\"Max Mule\\\",\\\"city\\\":\\\"San Francisco\\\",\\\"postal\\\":\\\"94108\\\"}]"}
+
+]]></types:shape>
+    </types:type>
+    <types:type name="example-accounts" format="json">
+      <types:shape format="weave" example="examples/example.accounts.json"><![CDATA[%dw 2.0
+
+type example_accounts = Array<{|  accountID: Number {"typeId": "int"},   name: String,   Acc_Type: {| "type": String |},   address: {|    street: String,     city: String,     state: String,     country: String,     postal: String  |},   Air_miles: Number {"typeId": "int"},   creation_date: String|}> {"example": "[{\\\"accountID\\\":5039,\\\"name\\\":\\\"Maxine Mule\\\",\\\"Acc_Type\\\":{\\\"type\\\":\\\"Personal\\\"},\\\"address\\\":{\\\"street\\\":\\\"77 Geary Street\\\",\\\"city\\\":\\\"San Francisco\\\",\\\"state\\\":\\\"California\\\",\\\"country\\\":\\\"United States\\\",\\\"postal\\\":\\\"94108\\\"},\\\"Air_miles\\\":2344,\\\"creation_date\\\":\\\"2016-05-28T12:41:41.090Z\\\"},{\\\"accountID\\\":2311,\\\"name\\\":\\\"jagadeesh gorripati\\\",\\\"Acc_Type\\\":{\\\"type\\\":\\\"Personal\\\"},\\\"address\\\":{\\\"street\\\":\\\"77 Geary Street\\\",\\\"city\\\":\\\"San Francisco\\\",\\\"state\\\":\\\"California\\\",\\\"country\\\":\\\"United States\\\",\\\"postal\\\":\\\"94108\\\"},\\\"Air_miles\\\":2455,\\\"creation_date\\\":\\\"2016-05-28T12:41:41.090Z\\\"}]"}
+
+]]></types:shape>
+    </types:type>
+  </types:catalog>
+  <types:enrichment select="#59e8aa44-498a-4f7d-90a1-9cb6af33a526">
+    <types:processor-declaration>
+      <types:output-event>
+        <types:message>
+          <types:payload type="example-accounts"/>
+        </types:message>
+      </types:output-event>
+    </types:processor-declaration>
+  </types:enrichment>
+</types:mule>

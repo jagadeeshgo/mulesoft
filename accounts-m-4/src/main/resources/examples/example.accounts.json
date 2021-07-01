@@ -1,0 +1,34 @@
+[
+  {
+    "accountID": 5039,
+    "name": "Maxine Mule",
+    "Acc_Type": {
+      "type": "Personal"
+    },
+    "address": {
+      "street": "77 Geary Street",
+      "city": "San Francisco",
+      "state": "California",
+      "country": "United States",
+      "postal": "94108"
+    },
+    "Air_miles": 2344,
+    "creation_date": "2016-05-28T12:41:41.090Z"
+  },
+  {
+    "accountID": 2311,
+    "name": "jagadeesh gorripati",
+    "Acc_Type": {
+      "type": "Personal"
+    },
+    "address": {
+      "street": "77 Geary Street",
+      "city": "San Francisco",
+      "state": "California",
+      "country": "United States",
+      "postal": "94108"
+    },
+    "Air_miles": 2455,
+    "creation_date": "2016-05-28T12:41:41.090Z"
+  }
+]
