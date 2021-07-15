@@ -1,0 +1,17 @@
+http:
+  port: "8081"
+  
+sfdc:
+  username: "jagadeesh@njc.com"
+  password: "salesforce@1998"
+  token:  "op7s5CPyevx7tjOnjy6owHICY"
+  
+file:
+  accountsDir:  "D:/mulesoft/devfund/APDevFundamentals4.3_studentFiles_29apr2021/APDevFundamentals4.3_studentFiles_29apr2021/resources"
+  
+db:
+  host: "iltdb.learn.mulesoft.com"
+  port: "3306"
+  user: "mule"
+  password: "mule"
+  database: "training"
