@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd">
+	<http:listener-config name="HTTP_Listener_config" doc:name="HTTP Listener config" doc:id="86d5b526-14cd-4165-a87a-600b848440c8" >
+		<http:listener-connection host="0.0.0.0" port="8081" />
+	</http:listener-config>
+	<http:request-config name="Accounts_HTTP_Request_configuration" doc:name="HTTP Request configuration" doc:id="096ef512-f92b-4eae-ac6e-1b5febc36c1e" >
+		<http:request-connection host="diy-api-20201209.us-w2.cloudhub.io" port="80" />
+	</http:request-config>
+	<flow name="module-6-diyFlow" doc:id="d93ffc89-d719-49f5-92ac-dfc9429a6a3e" >
+		<http:listener doc:name="get /byname" doc:id="7b6d2240-1834-479f-a53f-18601f417029" config-ref="HTTP_Listener_config" path="/accounts-by-name" allowedMethods="GET"/>
+		<logger level="INFO" doc:name="mule first message" doc:id="f824901d-479f-4cf7-b5ed-a8ccf7e9785b" />
+		<set-variable value="#[attributes.headers.csr_user_id]" doc:name="userid" doc:id="ab4e11e2-fc03-4452-98bb-d2498730f22f" variableName="userid"/>
+		<set-variable value="#[attributes.queryParams.cname]" doc:name="username" doc:id="93e16b07-e47c-49d3-8337-8314683edf8e" variableName="username"/>
+		<http:request method="GET" doc:name="Request" doc:id="a4f89568-ad52-41b9-8d2b-a39ac065d9aa" config-ref="Accounts_HTTP_Request_configuration" path="/accounts">
+			<http:headers ><![CDATA[#[{
+	user_id : vars.userId,
+	client_id: "39100c46cff946b5868874321cb173c8",
+	client_secret: "ff038c1977E04804aC16bbE0Af89cf12"
+}]]]></http:headers>
+			<http:query-params ><![CDATA[#[{
+	account_name:vars.username
+}]]]></http:query-params>
+		</http:request>
+		<logger level="INFO" doc:name="Last mule message" doc:id="820a85aa-5f81-428b-8b43-d1a9ca650f29" />
+	</flow>
+	<flow name="module-6-diyFlow1" doc:id="6912fa8e-297f-45a1-aba9-03d3abf9741f" >
+		<http:listener doc:name="get /bytype" doc:id="c173e8ac-2ef1-449c-822a-71d8a9a08feb" config-ref="HTTP_Listener_config" path="/accounts-by-type" allowedMethods="GET"/>
+		<logger level="INFO" doc:name="first-mule message" doc:id="8f6b16cd-78e9-46ed-87f2-df054763331a" />
+		<set-variable value="#[attributes.headers.csr_user_id]" doc:name="userid" doc:id="69f27dc0-0d2b-45bd-9a6f-c8f46ae8c230" variableName="userid"/>
+		<set-variable value='#[attributes.queryParams.ctype default "business"]' doc:name="accunttype" doc:id="c33dae70-9ac8-4f3f-b699-c2baa071dd98" variableName="accunttype"/>
+		<http:request method="GET" doc:name="Request" doc:id="68fe23c2-dfae-400b-a920-7f27e72325b1" config-ref="Accounts_HTTP_Request_configuration" path="/accounts">
+			<http:headers ><![CDATA[#[{
+	user_id : vars.userId,
+	client_id: "39100c46cff946b5868874321cb173c8",
+	client_secret: "ff038c1977E04804aC16bbE0Af89cf12"
+}]]]></http:headers>
+			<http:query-params ><![CDATA[#[{
+	account_type:vars.accunttype
+}]]]></http:query-params>
+		</http:request>
+		<logger level="INFO" doc:name="Last-mule-message" doc:id="323a424c-131e-40ca-a777-8e19b9c35bab" />
+	</flow>
+</mule>
